@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      # We can specify AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+      AWS_ACCESS_KEY_ID: 123
+      AWS_SECRET_ACCESS_KEY: 123
+      AWS_DEFAULT_REGION: us-west-2
+      AWS_DEFAULT_OUTPUT: json
+      AUTO_SCALING_GROUP_NAME: "my-auto-scaling-group"
+      LAUNCH_CONFIGURATION_NAME: "my-launch-configuration"
+      MIN_SIZE: "1"
+      MAX_SIZE: "3"
+      DESIRED_CAPACITY: "2"
+      # Ensure TARGET_GROUP_ARNS is a comma-separated list if there are multiple ARNs.
+      TARGET_GROUP_ARNS: "arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/my-targets/73e2d6bc24d8a067"
+      VPC_ZONE_IDENTIFIER: "subnet-xxxx"
+      LOAD_BALANCER_NAME: "my-application-load-balancer"
+      VPC_ID: "vpc-xxxxxxx"
+      # Provide SUBNET_IDS as a comma-separated list.
+      SUBNET_IDS: "subnet-xxxx,subnet-yyyy"
+    volumes:
+      # Also we can copy current configuration files for awscli
+      - ~/.aws/config:/root/.aws/config:ro
+      - ~/.aws/credentials:/root/.aws/credentials:ro
+      - .:/app    
